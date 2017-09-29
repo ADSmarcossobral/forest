@@ -267,7 +267,7 @@ namespace forest {
                                         x = x->left;
                                 }else if(key > x->key){
                                         x = x->right;
-                                else{
+                                }else{
                                         if(x->left == nullptr && x->right == nullptr){
                                                 delete(x);
                                         } else if(x->left == nullptr){
