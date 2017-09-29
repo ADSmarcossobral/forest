@@ -285,7 +285,7 @@ namespace forest {
                                                         x->parent->left = x->left;
                                                 delete(x);
                                         } else{
-                                                splay_tree_node *child = x->left;
+                                                binary_search_tree_node *child = x->left;
                                                 while(child->right != nullptr)
                                                         child = child->right;
                                                 x->value = child->value;
