@@ -261,47 +261,54 @@ namespace forest {
                  * @return true to success, otherwise false
                  */
                 bool delete_node(key_t key) {
-                        const splay_tree_node <key_t, value_t> *x = search(key);
-                        if(x == nullptr)
-                                return false;
-                        if(x->left == nullptr && x->right == nullptr){
-                                delete(x);
-                        } else if(x->left == nullptr){
-                                x->right->parent = x->parent;
-                                if(x->parent->right->key == x->key)
-                                        x->parent->right = x->right;
-                                else
-                                        x->parent->left = x->right;
-                                delete(x);
-                        } else if(x->right == nullptr){
-                                x->left->parent = x->parent;
-                                if(x->parent->right->key == x->key)
-                                        x->parent->right = x->left;
-                                else
-                                        x->parent->left = x->left;
-                                delete(x);
-                        } else{
-                                splay_tree_node *child = x->left;
-                                while(child->right != nullptr)
-                                        child = child->right;
-                                x->value = child->value;
-                                x->key = child->key;
-                                if(child->left == nullptr){
-                                        child->right->parent = child->parent;
-                                        if(child->parent->right->key == child->key)
-                                                child->parent->right = child->right;
-                                        else
-                                                child->parent->left = child->right;
-                                } else{
-                                        child->right->parent = child->parent;
-                                        if(child->parent->right->key == child->key)
-                                                child->parent->right = child->right;
-                                        else
-                                                child->parent->left = child->right;
+                        binary_search_tree_node <key_t, value_t> *x = root;
+                        while(x != nullptr){
+                                if(key < x->key){
+                                        x = x->left;
+                                }else if(key > x->key){
+                                        x = x->right;
+                                else{
+                                        if(x->left == nullptr && x->right == nullptr){
+                                                delete(x);
+                                        } else if(x->left == nullptr){
+                                                x->right->parent = x->parent;
+                                                if(x->parent->right->key == x->key)
+                                                        x->parent->right = x->right;
+                                                else
+                                                        x->parent->left = x->right;
+                                                delete(x);
+                                        } else if(x->right == nullptr){
+                                                x->left->parent = x->parent;
+                                                if(x->parent->right->key == x->key)
+                                                        x->parent->right = x->left;
+                                                else
+                                                        x->parent->left = x->left;
+                                                delete(x);
+                                        } else{
+                                                splay_tree_node *child = x->left;
+                                                while(child->right != nullptr)
+                                                        child = child->right;
+                                                x->value = child->value;
+                                                x->key = child->key;
+                                                if(child->left == nullptr){
+                                                        child->right->parent = child->parent;
+                                                        if(child->parent->right->key == child->key)
+                                                                child->parent->right = child->right;
+                                                        else
+                                                                child->parent->left = child->right;
+                                                } else{
+                                                        child->right->parent = child->parent;
+                                                        if(child->parent->right->key == child->key)
+                                                                child->parent->right = child->right;
+                                                        else
+                                                                child->parent->left = child->right;
+                                                }
+                                                delete(child);
+                                        }
+                                        return true;
                                 }
-                                delete(child);
                         }
-                        return true;
+                        return false;
                 }
         };
 }
