@@ -269,20 +269,47 @@ namespace forest {
                                         x = x->right;
                                 }else{
                                         if(x->left == nullptr && x->right == nullptr){
+                                                if(x->parent == nullptr)
+                                                        root = nullptr;
+                                                else if(x->parent->right != nullptr){
+                                                        if(x->parent->right->key == x->key)
+                                                                x->parent->right = nullptr;
+                                                        else
+                                                                x->parent->left = nullptr;
+                                                }else
+                                                        x->parent->left = nullptr;
                                                 delete(x);
-                                        } else if(x->left == nullptr){
-                                                x->right->parent = x->parent;
-                                                if(x->parent->right->key == x->key)
-                                                        x->parent->right = x->right;
-                                                else
-                                                        x->parent->left = x->right;
+                                        }else if(x->left == nullptr){
+                                                if(x->parent != nullptr){
+                                                        x->right->parent = x->parent;
+                                                        if(x->parent->right != nullptr){
+                                                                if(x->parent->right->key == x->key)
+                                                                        x->parent->right = x->right;
+                                                                else
+                                                                        x->parent->left = x->right;
+                                                        } else{
+                                                                x->parent->left = x->right;
+                                                        }
+                                                }else{
+                                                        x->right->parent = nullptr;
+                                                        root = x->right;
+                                                }
                                                 delete(x);
                                         } else if(x->right == nullptr){
-                                                x->left->parent = x->parent;
-                                                if(x->parent->right->key == x->key)
-                                                        x->parent->right = x->left;
-                                                else
-                                                        x->parent->left = x->left;
+                                                if(x->parent != nullptr){
+                                                        x->left->parent = x->parent;
+                                                        if(x->parent->right != nullptr){
+                                                                if(x->parent->right->key == x->key)
+                                                                        x->parent->right = x->left;
+                                                                else
+                                                                        x->parent->left = x->left;
+                                                        }else{
+                                                                x->parent->left = x->left;
+                                                        }
+                                                }else{
+                                                        x->left->parent = nullptr;
+                                                        root = x->left;
+                                                }
                                                 delete(x);
                                         } else{
                                                 binary_search_tree_node <key_t, value_t> *child = x->left;
@@ -290,18 +317,23 @@ namespace forest {
                                                         child = child->right;
                                                 x->value = child->value;
                                                 x->key = child->key;
-                                                if(child->left == nullptr){
-                                                        child->right->parent = child->parent;
-                                                        if(child->parent->right->key == child->key)
-                                                                child->parent->right = child->right;
-                                                        else
-                                                                child->parent->left = child->right;
+                                                if(child->left != nullptr){
+                                                        if(child->parent->left->key == child->key){
+                                                                child->parent->left = child->left;
+                                                                child->left->parent = child->parent;
+                                                        }else{
+                                                                child->parent->right = child->left;
+                                                                child->left->parent = child->parent;
+                                                        }
                                                 } else{
-                                                        child->right->parent = child->parent;
-                                                        if(child->parent->right->key == child->key)
-                                                                child->parent->right = child->right;
-                                                        else
-                                                                child->parent->left = child->right;
+                                                        if(child->parent->left != nullptr){
+                                                                if(child->parent->left->key == child->key)
+                                                                        child->parent->left = nullptr;
+                                                                else
+                                                                        child->parent->right = nullptr;
+                                                        }else{
+                                                                child->parent->right = nullptr;
+                                                        }
                                                 }
                                                 delete(child);
                                         }
